@@ -24,10 +24,6 @@ async function fetchData() {
     displayUser(data.results);
     arrayOfUsers = data.results;
     console.log(arrayOfUsers);
-    arrayOfUsers.forEach(user => {
-        array_of_names.push(`${user.name.first.toLowerCase()} ${user.name.last.toLowerCase()}`);
-    });
-    console.log(array_of_names);
     } catch (error){
         console.log(error);
 
@@ -42,15 +38,15 @@ function displayUser (data) {
 
     data.forEach( user => {
        const userCard =  `<div class="card">
-                    <div class="card-img-container">
-                        <img class="card-img" src="${user.picture.medium}" alt="profile picture">
-                    </div>
-                    <div class="card-info-container">
-                        <h3 id="name" class="card-name cap">${user.name.first} ${user.name.last}</h3>
-                        <p class="card-text">${user.email}</p>
-                        <p class="card-text cap">${user.location.city} ${user.location.state}</p>
-                    </div>
-                </div>`
+                            <div class="card-img-container">
+                                <img class="card-img" src="${user.picture.medium}" alt="profile picture">
+                            </div>
+                            <div class="card-info-container">
+                                <h3 id="name" class="card-name cap">${user.name.first} ${user.name.last}</h3>
+                                <p class="card-text">${user.email}</p>
+                                <p class="card-text cap">${user.location.city} ${user.location.state}</p>
+                            </div>
+                        </div>`
         gallery.insertAdjacentHTML('beforeend', userCard);
     });
 }
@@ -81,14 +77,14 @@ gallery.addEventListener('click', (e) => {
             modal_birthday.textContent = `Birthday: ${month}/${day}/${year}`;
         }
     });
-
-
 });
+
 
 //ADDING EVENT LISTENER TO THE 'CLOSE' BUTTON
 close_button.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
+
 
 //DYNAMICALLY ADDING SEARCH FIELD
 function createSearchBar() {
@@ -101,19 +97,17 @@ function createSearchBar() {
  createSearchBar();
 
 //SEARCH FIELD FUNCTIONALITY
-
 document.getElementById('search-input').addEventListener('keyup', (e)=> {
     const search_results = [];
+    gallery.innerHTML = '';
     arrayOfUsers.forEach( user => {
-        const full_name = `${user.name.first} ${user.name.last}`;
+        const full_name = `${user.name.first.toLowerCase()} ${user.name.last.toLowerCase()}`;
         const search_input = e.target.value.toLowerCase();
         if (full_name.includes(search_input)) {
             search_results.push(user);
         }
     });            
-    console.log(search_results);
-
-
+    displayUser(search_results);
 });
 
 //regex for phone
