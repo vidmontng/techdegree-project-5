@@ -1,9 +1,12 @@
+const body = document.querySelector('body');
+create_modal();
+const overlay = document.getElementById('modal-container');
+overlay.style.display = 'none';
+const btn_close = document.getElementById('modal-close-btn');
 const gallery = document.querySelector('#gallery');
 let arrayOfUsers;
 const userCards = document.getElementsByClassName('card');
 //variables for working with modals
-const overlay = document.querySelector('.modal-container');
-overlay.style.display = 'none';
 const modal_img = document.querySelector('.modal-img');
 const modal_name = document.querySelector('#modal-name');
 const modal_email = document.querySelector('#modal-email');
@@ -12,9 +15,7 @@ const modal_phone = document.querySelector('#modal-phone');
 const modal_address = document.querySelector('#modal-address');
 const modal_birthday = document.querySelector('#modal-birthday');
 const search_container = document.querySelector('div[class="search-container"]');
-const close_button = document.querySelector('.modal-close-btn');
 const array_of_names = [];
-// const search_field = document.getElementById('search-input');
 
 async function fetchData() {
     try {
@@ -22,6 +23,7 @@ async function fetchData() {
     const data = await reponse.json();
     // console.log(data.results);
     displayUser(data.results);
+    createSearchBar();
     arrayOfUsers = data.results;
     console.log(arrayOfUsers);
     } catch (error){
@@ -51,64 +53,88 @@ function displayUser (data) {
     });
 }
 
-/************
- * MODALS
- ***********/
+/**
+ * EVENT LISTENER FOR REVEALING MODALS 
+ */
 gallery.addEventListener('click', (e) => {
     const userName = e.target.closest('.card').querySelector('[id="name"]');
     const name = userName.textContent;
-    // console.log(name);
-
+    overlay.style.display = 'block';
     arrayOfUsers.forEach( user => {
-        const first_last = `${user.name.first} ${user.name.last}`;
+        const full_name = `${user.name.first} ${user.name.last}`;
 
-        if ( name === first_last) {
-            overlay.style.display = 'block';
-            modal_img.src = `${user.picture.medium}`;
-            modal_name.textContent = first_last;
-            modal_email.textContent = `${user.email}`;
-            modal_location.textContent = `${user.location.country}`;
-            modal_phone.textContent = `${user.phone}`.replace();
-            modal_address.textContent = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode} `;
+        if ( name === full_name) {
+            const address = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode}`;
             const dob = user.dob.date.substring(0, 10);
             const year = dob.substring(0,4);
             const month = dob.substring(5,7);
             const day = dob.substring(8);
-            modal_birthday.textContent = `Birthday: ${month}/${day}/${year}`;
+            document.getElementById('modal-img').src = `${user.picture.medium}`;
+            document.getElementById('modal-name').textContent = `${full_name}`;
+            document.getElementById('modal-email').textContent = `${user.email}`;
+            document.getElementById('modal-city').textContent = `${user.location.country}`;
+            document.getElementById('modal-phone').textContent = `${user.phone}`;
+            document.getElementById('modal-address').textContent = `${address}`;
+            document.getElementById('modal-address').textContent = `Birthday: ${month}/${day}/${year}`;
         }
+    
     });
-});
+})
+
+/************
+ * MODALS
+ ***********/
+function create_modal() {
+        const modal = `
+        <div id="modal-container" class="modal-container">
+            <div class="modal">
+                <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+                <div class="modal-info-container">
+                    <img id="modal-img" class="modal-img" src="" alt="profile picture">
+                    <h3 id="modal-name" class="modal-name cap"></h3>
+                    <p id="modal-email" class="modal-text"></p>
+                    <p id="modal-city" class="modal-text cap"></p>
+                    <hr>
+                    <p id="modal-phone" class="modal-text"></p>
+                    <p id="modal-address" class="modal-text"></p>
+                    <p id="modal-birthday"class="modal-text"></p>
+                </div>
+            </div>
+        `;      
+    body.insertAdjacentHTML('beforeend', modal);
+    }
+
 
 
 //ADDING EVENT LISTENER TO THE 'CLOSE' BUTTON
-close_button.addEventListener('click', () => {
+
+btn_close.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
 
-
-//DYNAMICALLY ADDING SEARCH FIELD
+//DYNAMICALLY ADDING SEARCH FIELD *AND* ADDING FUNCTIONALITY TO IT IN ONE FUNCTION THAT WILL BE PASSED TO THE MAIN FUNCTION fetchData()
 function createSearchBar() {
     const searchBar = `<form action="#" method="get">
                             <input type="search" id="search-input" class="search-input" placeholder="Search...">
                             <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
                         </form>`;   
             search_container.insertAdjacentHTML('beforeend', searchBar); 
- }
- createSearchBar();
 
-//SEARCH FIELD FUNCTIONALITY
-document.getElementById('search-input').addEventListener('keyup', (e)=> {
-    const search_results = [];
-    gallery.innerHTML = '';
-    arrayOfUsers.forEach( user => {
-        const full_name = `${user.name.first.toLowerCase()} ${user.name.last.toLowerCase()}`;
-        const search_input = e.target.value.toLowerCase();
-        if (full_name.includes(search_input)) {
-            search_results.push(user);
-        }
-    });            
-    displayUser(search_results);
-});
+            document.getElementById('search-input').addEventListener('keyup', (e)=> {
+                const search_results = [];
+                gallery.innerHTML = '';
+                arrayOfUsers.forEach( user => {
+                    const full_name = `${user.name.first.toLowerCase()} ${user.name.last.toLowerCase()}`;
+                    const search_input = e.target.value.toLowerCase();
+                    if (full_name.includes(search_input)) {
+                        search_results.push(user);
+                    }
+                });            
+                displayUser(search_results);
+            });
+ }
+
+
 
 //regex for phone
 // function isValidTelephone(telephone) {
