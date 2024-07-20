@@ -3,10 +3,10 @@ create_modal();
 const overlay = document.getElementById('modal-container');
 overlay.style.display = 'none';
 const btn_close = document.getElementById('modal-close-btn');
+const btn_prev = document.getElementById('modal-prev');
 const gallery = document.querySelector('#gallery');
 let arrayOfUsers;
 const userCards = document.getElementsByClassName('card');
-//variables for working with modals
 const modal_img = document.querySelector('.modal-img');
 const modal_name = document.querySelector('#modal-name');
 const modal_email = document.querySelector('#modal-email');
@@ -16,6 +16,7 @@ const modal_address = document.querySelector('#modal-address');
 const modal_birthday = document.querySelector('#modal-birthday');
 const search_container = document.querySelector('div[class="search-container"]');
 const array_of_names = [];
+let all_user_names;
 
 async function fetchData() {
     try {
@@ -57,13 +58,17 @@ function displayUser (data) {
  * EVENT LISTENER FOR REVEALING MODALS 
  */
 gallery.addEventListener('click', (e) => {
-    const userName = e.target.closest('.card').querySelector('[id="name"]');
-    const name = userName.textContent;
+    const target_user_card = e.target.closest('.card');
+    const target_user_card_nameElement = target_user_card.querySelector('[id="name"]');
+    const target_user_name = target_user_card_nameElement.textContent;
+     all_user_names = document.querySelectorAll('.card');
+    
+
     overlay.style.display = 'block';
     arrayOfUsers.forEach( user => {
         const full_name = `${user.name.first} ${user.name.last}`;
 
-        if ( name === full_name) {
+        if ( target_user_name === full_name) {
             const address = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode}`;
             const dob = user.dob.date.substring(0, 10);
             const year = dob.substring(0,4);
@@ -78,11 +83,15 @@ gallery.addEventListener('click', (e) => {
             document.getElementById('modal-address').textContent = `Birthday: ${month}/${day}/${year}`;
         }
     
-    });
+    }); 
+    
+
+        console.log(all_user_names);
+        return all_user_names;
 })
 
 /************
- * MODALS
+ * CREATING MODALS
  ***********/
 function create_modal() {
         const modal = `
@@ -99,6 +108,10 @@ function create_modal() {
                     <p id="modal-address" class="modal-text"></p>
                     <p id="modal-birthday"class="modal-text"></p>
                 </div>
+                <div class="modal-btn-container">
+                    <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                    <button type="button" id="modal-next" class="modal-next btn">Next</button>
+                </div>
             </div>
         `;      
     body.insertAdjacentHTML('beforeend', modal);
@@ -111,6 +124,18 @@ function create_modal() {
 btn_close.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
+
+
+//ADDING EVENT LISTENER TO THE "PREV" AND "NEXT" BUTTONS
+btn_prev.addEventListener('click', (e) => {
+    const target_modal = e.target.closest('.modal');
+    const name = target_modal.querySelector('#modal-name');
+
+
+});
+
+
+
 
 //DYNAMICALLY ADDING SEARCH FIELD *AND* ADDING FUNCTIONALITY TO IT IN ONE FUNCTION THAT WILL BE PASSED TO THE MAIN FUNCTION fetchData()
 function createSearchBar() {
@@ -133,6 +158,23 @@ function createSearchBar() {
                 displayUser(search_results);
             });
  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
