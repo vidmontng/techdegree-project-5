@@ -1,3 +1,4 @@
+
 const body = document.querySelector('body');
 create_modal();
 const overlay = document.getElementById('modal-container');
@@ -17,127 +18,27 @@ const modal_birthday = document.querySelector('#modal-birthday');
 const search_container = document.querySelector('div[class="search-container"]');
 const array_of_names = [];
 let all_user_names;
+let array_of_displayed_names = [];
 
+fetchData();
+
+//main function, fetching data
 async function fetchData() {
     try {
     const reponse = await fetch('https://randomuser.me/api/?results=12&nat=AU,CA,GB,IE,IN,NZ,US&inc=picture,name,dob,email,location,phone,nat');
     const data = await reponse.json();
-    // console.log(data.results);
-    displayUser(data.results);
-    createSearchBar();
     arrayOfUsers = data.results;
+    arrayOfUsers.forEach( user => displayUser(user));
+    createSearchBar();   
     console.log(arrayOfUsers);
     } catch (error){
         console.log(error);
-
     }
 }
-fetchData();
+/***************************************************************************************************************************************
+ * DYNAMICALLY ADDING SEARCH FIELD *AND* ADDING FUNCTIONALITY TO IT IN ONE FUNCTION THAT WILL BE PASSED TO THE MAIN FUNCTION fetchData()
+ ****************************************************************************************************************************************/
 
-/****
- * DISPPLAYING ALL USER CARDS
- */
-function displayUser (data) {
-
-    data.forEach( user => {
-       const userCard =  `<div class="card">
-                            <div class="card-img-container">
-                                <img class="card-img" src="${user.picture.medium}" alt="profile picture">
-                            </div>
-                            <div class="card-info-container">
-                                <h3 id="name" class="card-name cap">${user.name.first} ${user.name.last}</h3>
-                                <p class="card-text">${user.email}</p>
-                                <p class="card-text cap">${user.location.city} ${user.location.state}</p>
-                            </div>
-                        </div>`
-        gallery.insertAdjacentHTML('beforeend', userCard);
-    });
-}
-
-/**
- * EVENT LISTENER FOR REVEALING MODALS 
- */
-gallery.addEventListener('click', (e) => {
-    const target_user_card = e.target.closest('.card');
-    const target_user_card_nameElement = target_user_card.querySelector('[id="name"]');
-    const target_user_name = target_user_card_nameElement.textContent;
-     all_user_names = document.querySelectorAll('.card');
-    
-
-    overlay.style.display = 'block';
-    arrayOfUsers.forEach( user => {
-        const full_name = `${user.name.first} ${user.name.last}`;
-
-        if ( target_user_name === full_name) {
-            const address = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode}`;
-            const dob = user.dob.date.substring(0, 10);
-            const year = dob.substring(0,4);
-            const month = dob.substring(5,7);
-            const day = dob.substring(8);
-            document.getElementById('modal-img').src = `${user.picture.medium}`;
-            document.getElementById('modal-name').textContent = `${full_name}`;
-            document.getElementById('modal-email').textContent = `${user.email}`;
-            document.getElementById('modal-city').textContent = `${user.location.country}`;
-            document.getElementById('modal-phone').textContent = `${user.phone}`;
-            document.getElementById('modal-address').textContent = `${address}`;
-            document.getElementById('modal-address').textContent = `Birthday: ${month}/${day}/${year}`;
-        }
-    
-    }); 
-    
-
-        console.log(all_user_names);
-        return all_user_names;
-})
-
-/************
- * CREATING MODALS
- ***********/
-function create_modal() {
-        const modal = `
-        <div id="modal-container" class="modal-container">
-            <div class="modal">
-                <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-                <div class="modal-info-container">
-                    <img id="modal-img" class="modal-img" src="" alt="profile picture">
-                    <h3 id="modal-name" class="modal-name cap"></h3>
-                    <p id="modal-email" class="modal-text"></p>
-                    <p id="modal-city" class="modal-text cap"></p>
-                    <hr>
-                    <p id="modal-phone" class="modal-text"></p>
-                    <p id="modal-address" class="modal-text"></p>
-                    <p id="modal-birthday"class="modal-text"></p>
-                </div>
-                <div class="modal-btn-container">
-                    <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-                    <button type="button" id="modal-next" class="modal-next btn">Next</button>
-                </div>
-            </div>
-        `;      
-    body.insertAdjacentHTML('beforeend', modal);
-    }
-
-
-
-//ADDING EVENT LISTENER TO THE 'CLOSE' BUTTON
-
-btn_close.addEventListener('click', () => {
-    overlay.style.display = 'none';
-});
-
-
-//ADDING EVENT LISTENER TO THE "PREV" AND "NEXT" BUTTONS
-btn_prev.addEventListener('click', (e) => {
-    const target_modal = e.target.closest('.modal');
-    const name = target_modal.querySelector('#modal-name');
-
-
-});
-
-
-
-
-//DYNAMICALLY ADDING SEARCH FIELD *AND* ADDING FUNCTIONALITY TO IT IN ONE FUNCTION THAT WILL BE PASSED TO THE MAIN FUNCTION fetchData()
 function createSearchBar() {
     const searchBar = `<form action="#" method="get">
                             <input type="search" id="search-input" class="search-input" placeholder="Search...">
@@ -146,18 +47,143 @@ function createSearchBar() {
             search_container.insertAdjacentHTML('beforeend', searchBar); 
 
             document.getElementById('search-input').addEventListener('keyup', (e)=> {
-                const search_results = [];
                 gallery.innerHTML = '';
                 arrayOfUsers.forEach( user => {
                     const full_name = `${user.name.first.toLowerCase()} ${user.name.last.toLowerCase()}`;
                     const search_input = e.target.value.toLowerCase();
                     if (full_name.includes(search_input)) {
-                        search_results.push(user);
+                        displayUser(user);
                     }
                 });            
-                displayUser(search_results);
             });
  }
+
+
+/******************************************
+ * CREATING MODAL AND ADDING IT TO THE PAGE 
+ ******************************************/
+function create_modal() {
+
+    const modal = `
+    <div id="modal-container" class="modal-container">
+        <div class="modal">
+            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+            <div class="modal-info-container">
+                <img id="modal-img" class="modal-img" src="" alt="profile picture">
+                <h3 id="modal-name" class="modal-name cap"></h3>
+                <p id="modal-email" class="modal-text"></p>
+                <p id="modal-city" class="modal-text cap"></p>
+                <hr>
+                <p id="modal-phone" class="modal-text"></p>
+                <p id="modal-address" class="modal-text"></p>
+                <p id="modal-birthday"class="modal-text"></p>
+            </div>
+            <div class="modal-btn-container">
+                <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                <button type="button" id="modal-next" class="modal-next btn">Next</button>
+            </div>
+        </div>
+    `;      
+body.insertAdjacentHTML('beforeend', modal);
+}
+
+
+/****************************
+ * DISPPLAYING ALL USER CARDS
+ ****************************/
+function displayUser (userInfo) {
+    
+       const userCard =  `<div class="card">
+                            <div class="card-img-container">
+                                <img class="card-img" src="${userInfo.picture.medium}" alt="profile picture">
+                            </div>
+                            <div class="card-info-container">
+                                <h3 id="name" class="card-name cap">${userInfo.name.first} ${userInfo.name.last}</h3>
+                                <p class="card-text">${userInfo.email}</p>
+                                <p class="card-text cap">${userInfo.location.city} ${userInfo.location.state}</p>
+                            </div>
+                        </div>`
+        gallery.insertAdjacentHTML('beforeend', userCard);
+}
+
+/*************************************
+ * EVENT LISTENER FOR REVEALING MODALS 
+ *************************************/
+gallery.addEventListener('click', (e) => {
+    overlay.style.display = 'block';
+    const target_user_card = e.target.closest('.card');
+    const target_userCard_nameElement = target_user_card.querySelector('[id="name"]');
+    const target_user_name = target_userCard_nameElement.textContent;
+    const allNames =  document.querySelectorAll('#name');
+    array_of_displayed_names = [];
+
+    arrayOfUsers.forEach( user => {
+        const full_name = `${user.name.first} ${user.name.last}`;
+        if (target_user_name === full_name) {
+            customize_modal(user);
+        }
+
+        for (let i=0; i<allNames.length; i++) {
+            const card_name = allNames[i].textContent;
+                if (card_name === full_name) {
+                    array_of_displayed_names.push(user);
+                }
+        }
+    });
+
+    
+    console.log(array_of_displayed_names);
+    return array_of_displayed_names;
+})
+
+
+/*******************
+ *CUSTOMIZING MODALS
+ *******************/
+
+ function customize_modal (user) {
+    const full_name = `${user.name.first} ${user.name.last}`;
+    const address = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode}`;
+    const dob = user.dob.date.substring(0, 10);
+    const year = dob.substring(0,4);
+    const month = dob.substring(5,7);
+    const day = dob.substring(8);
+             
+        document.getElementById('modal-img').src = `${user.picture.medium}`;
+        document.getElementById('modal-name').textContent = `${full_name}`;
+        document.getElementById('modal-email').textContent = `${user.email}`;
+        document.getElementById('modal-city').textContent = `${user.location.country}`;
+        document.getElementById('modal-phone').textContent = `${user.phone}`;
+        document.getElementById('modal-address').textContent = `${address}`;
+        document.getElementById('modal-address').textContent = `Birthday: ${month}/${day}/${year}`;
+ }
+
+
+
+//ADDING EVENT LISTENER TO THE 'CLOSE' BUTTON
+
+document.getElementById('modal-close-btn').addEventListener('click', () => {
+    const modal_overlay = document.getElementById('modal-container');
+    modal_overlay.style.display = 'none';
+});
+
+
+// ADDING EVENT LISTENER TO THE "PREV" AND "NEXT" BUTTONS
+btn_prev.addEventListener('click', (e) => {
+    // const target_modal = e.target.closest('.modal');
+    // const name = target_modal.querySelector('#modal-name');
+console.log(array_of_displayed_names);
+
+});
+
+
+
+// function getAllSiblings(element, parent) {
+//     const children = [...parent.children];
+//     return children.filter(child => child !== element);
+// }
+// This will return all children of the parent node that are not the element.
+
 
 
 
@@ -182,4 +208,3 @@ function createSearchBar() {
 // function isValidTelephone(telephone) {
 //     return  /^\D*\d{3}\D*\d{3}\D*\d{4}\D*$/.test(telephone);
 //   }
-
