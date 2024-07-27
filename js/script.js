@@ -5,6 +5,7 @@ const overlay = document.getElementById('modal-container');
 overlay.style.display = 'none';
 const btn_close = document.getElementById('modal-close-btn');
 const btn_prev = document.getElementById('modal-prev');
+const btn_next = document.getElementById('modal-next');
 const gallery = document.querySelector('#gallery');
 let arrayOfUsers;
 const userCards = document.getElementsByClassName('card');
@@ -132,7 +133,6 @@ gallery.addEventListener('click', (e) => {
     });
 
     
-    console.log(array_of_displayed_names);
     return array_of_displayed_names;
 })
 
@@ -170,10 +170,43 @@ document.getElementById('modal-close-btn').addEventListener('click', () => {
 
 // ADDING EVENT LISTENER TO THE "PREV" AND "NEXT" BUTTONS
 btn_prev.addEventListener('click', (e) => {
-    // const target_modal = e.target.closest('.modal');
-    // const name = target_modal.querySelector('#modal-name');
-console.log(array_of_displayed_names);
+    const target_modal = e.target.closest('.modal');
+    const name = target_modal.querySelector('#modal-name').textContent;
+    for (let i=0; i<array_of_displayed_names.length; i++) {
+        const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
+        if (name === full_name && i !== 0) {
+            customize_modal (array_of_displayed_names[i-1])
+        }
+    }
+    console.log(name);
+    console.log(array_of_displayed_names);
+});
 
+
+
+btn_prev.addEventListener('click', (e) => {
+    const target_modal = e.target.closest('.modal');
+    const name = target_modal.querySelector('#modal-name').textContent;
+    for (let i=0; i<array_of_displayed_names.length; i++) {
+        const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
+        if (name === full_name && i !== 0) {
+            customize_modal (array_of_displayed_names[i-1])
+        }
+    }
+    console.log(name);
+    console.log(array_of_displayed_names);
+});
+
+btn_next.addEventListener('click', (e) => {
+    const target_modal = e.target.closest('.modal');
+    const name = target_modal.querySelector('#modal-name').textContent;
+    for (let i=0; i < array_of_displayed_names.length - 1; i++) {
+        const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
+        if (name === full_name) {
+            customize_modal(array_of_displayed_names[i+1]);
+        }
+    }
+    
 });
 
 
