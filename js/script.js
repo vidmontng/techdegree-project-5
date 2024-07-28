@@ -159,15 +159,22 @@ gallery.addEventListener('click', (e) => {
  }
 
 
+/************************************************************************************************************
+ * ADDING EVENT LISTENER TO THE 'CLOSE' BUTTON  **AND** CLOSING THE MODAL BY CLICKING ANYWHERE ELSE OUTSIDE THE MODAL 
+ ***********************************************************************************************************/
+[btn_close, overlay].forEach( target => {
+    target.addEventListener('click', (e) => {
+        if (e.target.closest('#modal-close-btn')) {
+            overlay.style.display = 'none';
+        }
 
-//ADDING EVENT LISTENER TO THE 'CLOSE' BUTTON
+        if (overlay.style.display === 'block' && !e.target.closest('.modal')) {
+            overlay.style.display = 'none';
+        }
 
-document.getElementById('modal-close-btn').addEventListener('click', () => {
-    const modal_overlay = document.getElementById('modal-container');
-    modal_overlay.style.display = 'none';
+    });
+
 });
-
-
 
 /******************************************************
  * EVENT LISTENERS FOR BOTH BUTTONS - "PREV" AND "NEXT"
@@ -180,13 +187,13 @@ document.getElementById('modal-close-btn').addEventListener('click', () => {
 
     for (let i=0; i<array_of_displayed_names.length; i++){        
         const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
-
+        //for "Prev" button
         if (e.target.textContent === 'Prev') {
             if (name === full_name && i !== 0) {
                 customize_modal (array_of_displayed_names[i-1])
             }
         }
-
+        //for "Next" button
         if (e.target.textContent === 'Next') {
             if (name === full_name && i < array_of_displayed_names.length - 1) {
                 customize_modal (array_of_displayed_names[i+1])
