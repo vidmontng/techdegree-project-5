@@ -108,33 +108,30 @@ function displayUser (userInfo) {
 }
 
 /*************************************
- * EVENT LISTENER FOR REVEALING MODALS 
+ * EVENT LISTENER FOR REVEALING MODALS            CORRECT ERROR!!!!!!!!!!!!!!!!!!!!
  *************************************/
-gallery.addEventListener('click', (e) => {
-    overlay.style.display = 'block';
-    const target_user_card = e.target.closest('.card');
-    const target_userCard_nameElement = target_user_card.querySelector('[id="name"]');
-    const target_user_name = target_userCard_nameElement.textContent;
-    const allNames =  document.querySelectorAll('#name');
-    array_of_displayed_names = [];
-
-    arrayOfUsers.forEach( user => {
-        const full_name = `${user.name.first} ${user.name.last}`;
-        if (target_user_name === full_name) {
-            customize_modal(user);
-        }
-
-        for (let i=0; i<allNames.length; i++) {
-            const card_name = allNames[i].textContent;
-                if (card_name === full_name) {
-                    array_of_displayed_names.push(user);
-                }
-        }
-    });
-
-    
-    return array_of_displayed_names;
-})
+    gallery.addEventListener('click', (e) => {
+        overlay.style.display = 'block';
+        const target_user_card = e.target.closest('.card');
+        const target_userCard_nameElement = target_user_card.querySelector('[id="name"]');
+        const target_user_name = target_userCard_nameElement.textContent;
+        const allNames =  document.querySelectorAll('#name');
+        array_of_displayed_names = [];
+        arrayOfUsers.forEach( user => {
+            const full_name = `${user.name.first} ${user.name.last}`;
+            if (target_user_name === full_name) {
+                customize_modal(user);
+            }
+            for (let i=0; i<allNames.length; i++) {
+                const card_name = allNames[i].textContent;
+                    if (card_name === full_name) {
+                        array_of_displayed_names.push(user);
+                    }
+            }
+        });
+        
+        return array_of_displayed_names;
+    })
 
 
 /*******************
@@ -177,14 +174,93 @@ gallery.addEventListener('click', (e) => {
 });
 
 /******************************************************
- * EVENT LISTENERS FOR BOTH BUTTONS - "PREV" AND "NEXT"
+ * EVENT LISTENERS FOR BOTH BUTTONS - "PREV" AND "NEXT".    Also added closing modals by pressing Escape key
  *****************************************************/
+
+/**
+ * This is working!!!
+ */
+
 [btn_prev, btn_next].forEach( button => {
     button.addEventListener('click', (e) => {
     const target_modal = e.target.closest('.modal');
     const name = target_modal.querySelector('#modal-name').textContent;
 
+    for (let i=0; i<array_of_displayed_names.length; i++){        
+        const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
 
+        //for "Prev" button
+        if (e.target.textContent === 'Prev') {
+            if (name === full_name && i !== 0) {
+                customize_modal (array_of_displayed_names[i-1])
+            }
+        }
+
+        //for "Next" button
+        if (e.target.textContent === 'Next') {
+            if (name === full_name && i < array_of_displayed_names.length - 1) {
+                customize_modal (array_of_displayed_names[i+1])
+            }
+        }
+    }
+    });
+});
+
+
+document.addEventListener('keydown', (e) => {
+    if (overlay.style.display === 'block') {
+        const current_modal = document.querySelector('.modal');
+        const currentModal_name = current_modal.querySelector('#modal-name').textContent;
+
+        for (let i=0; i<array_of_displayed_names.length; i++) {
+            const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
+            
+            //swipe left
+            if (e.key === "ArrowLeft") {
+
+                    if (currentModal_name=== full_name && i !== 0) {
+                        customize_modal (array_of_displayed_names[i-1])
+                    }
+            }
+
+            //swipe right
+            if (e.key === "ArrowRight") {
+                
+                    if (currentModal_name=== full_name && i < array_of_displayed_names.length - 1) {
+                        customize_modal (array_of_displayed_names[i+1])
+                    }
+            }
+        }
+
+        //close modal by pressing Escape key
+        if (e.key === "Escape") {
+
+            overlay.style.display = 'none';
+        }
+        
+    }
+})
+
+/**
+ * This is working!!!
+ */
+
+
+// [btn_prev, btn_next].forEach( button => {
+//     button.addEventListener(trigger, (e) => {
+//     const target_modal = e.target.closest('.modal');
+//     const name = target_modal.querySelector('#modal-name').textContent;
+
+        
+
+//     action('click', name);
+
+
+
+//     });
+// });
+
+    /**********
     for (let i=0; i<array_of_displayed_names.length; i++){        
         const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
         //for "Prev" button
@@ -200,9 +276,33 @@ gallery.addEventListener('click', (e) => {
             }
         }
     }
-    });
-});
 
+
+
+****/
+
+
+// function action(trigger, target_name) {
+//         for (let i=0; i<array_of_displayed_names.length; i++){        
+//             const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
+
+//             if (trigger === 'click') {
+
+//                 //for "Prev" button
+//                 if (ev_target.textContent === 'Prev') {
+//                     if (target_name === full_name && i !== 0) {
+//                         customize_modal (array_of_displayed_names[i-1])
+//                     }
+//                 }
+
+//                 if (ev_target.textContent === 'Next') {
+//                     if (target_name === full_name && i < array_of_displayed_names.length - 1) {
+//                         customize_modal (array_of_displayed_names[i+1])
+//                     }
+//                 }  
+//             }
+//         }
+// }
 
 
 
