@@ -108,34 +108,37 @@ function displayUser (userInfo) {
 }
 
 /*************************************
- * EVENT LISTENER FOR REVEALING MODALS            CORRECT ERROR!!!!!!!!!!!!!!!!!!!!
+ * EVENT LISTENER FOR REVEALING MODALS            
  *************************************/
-    gallery.addEventListener('click', (e) => {
-        overlay.style.display = 'block';
+   gallery.addEventListener('click', (e) => {
         const target_user_card = e.target.closest('.card');
-        const target_userCard_nameElement = target_user_card.querySelector('[id="name"]');
-        const target_user_name = target_userCard_nameElement.textContent;
-        const allNames =  document.querySelectorAll('#name');
-        array_of_displayed_names = [];
-        arrayOfUsers.forEach( user => {
-            const full_name = `${user.name.first} ${user.name.last}`;
-            if (target_user_name === full_name) {
-                customize_modal(user);
-            }
-            for (let i=0; i<allNames.length; i++) {
-                const card_name = allNames[i].textContent;
-                    if (card_name === full_name) {
-                        array_of_displayed_names.push(user);
-                    }
+
+        if (target_user_card) {
+            overlay.style.display = 'block';
+
+            const target_userCard_nameElement = target_user_card.querySelector('[id="name"]');
+            const target_user_name = target_userCard_nameElement.textContent;
+            const allNames =  document.querySelectorAll('#name');
+            array_of_displayed_names = [];
+            arrayOfUsers.forEach( user => {
+                const full_name = `${user.name.first} ${user.name.last}`;
+                if (target_user_name === full_name) {
+                    customize_modal(user);
+                }
+                for (let i=0; i<allNames.length; i++) {
+                    const card_name = allNames[i].textContent;
+                        if (card_name === full_name) {
+                            array_of_displayed_names.push(user);
+                        }
             }
         });
-        
+        }   
         return array_of_displayed_names;
     })
 
 
 /*******************
- *CUSTOMIZING MODALS
+ * CUSTOMIZING MODALS
  *******************/
 
  function customize_modal (user) {
