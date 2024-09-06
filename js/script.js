@@ -180,9 +180,6 @@ function displayUser (userInfo) {
  * EVENT LISTENERS FOR BOTH BUTTONS - "PREV" AND "NEXT".    Also added closing modals by pressing Escape key
  *****************************************************/
 
-/**
- * This is working!!!
- */
 
 [btn_prev, btn_next].forEach( button => {
     button.addEventListener('click', (e) => {
