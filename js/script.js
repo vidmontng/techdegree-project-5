@@ -101,7 +101,7 @@ function displayUser (userInfo) {
                             <div class="card-info-container">
                                 <h3 id="name" class="card-name cap">${userInfo.name.first} ${userInfo.name.last}</h3>
                                 <p class="card-text">${userInfo.email}</p>
-                                <p class="card-text cap">${userInfo.location.city} ${userInfo.location.state}</p>
+                                <p class="card-text cap">${userInfo.location.city}, ${userInfo.location.state}</p>
                             </div>
                         </div>`
         gallery.insertAdjacentHTML('beforeend', userCard);
@@ -155,7 +155,7 @@ function displayUser (userInfo) {
         document.getElementById('modal-city').textContent = `${user.location.country}`;
         document.getElementById('modal-phone').textContent = `${user.phone}`;
         document.getElementById('modal-address').textContent = `${address}`;
-        document.getElementById('modal-address').textContent = `Birthday: ${month}/${day}/${year}`;
+        document.getElementById('modal-birthday').textContent = `Birthday: ${month}/${day}/${year}`;
  }
 
 
