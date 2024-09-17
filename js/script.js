@@ -1,24 +1,21 @@
-
 const body = document.querySelector('body');
 create_modal();
 const overlay = document.getElementById('modal-container');
 overlay.style.display = 'none';
-const btn_close = document.getElementById('modal-close-btn');
-const btn_prev = document.getElementById('modal-prev');
-const btn_next = document.getElementById('modal-next');
-const gallery = document.querySelector('#gallery');
+const   btn_close = document.getElementById('modal-close-btn'),
+        btn_prev = document.getElementById('modal-prev'),
+        btn_next = document.getElementById('modal-next'),
+        gallery = document.querySelector('#gallery');
 let arrayOfUsers;
-const userCards = document.getElementsByClassName('card');
-const modal_img = document.querySelector('.modal-img');
-const modal_name = document.querySelector('#modal-name');
-const modal_email = document.querySelector('#modal-email');
-const modal_location = document.querySelector('#modal-city');
-const modal_phone = document.querySelector('#modal-phone');
-const modal_address = document.querySelector('#modal-address');
-const modal_birthday = document.querySelector('#modal-birthday');
-const search_container = document.querySelector('div[class="search-container"]');
-const array_of_names = [];
-let all_user_names;
+const   userCards = document.getElementsByClassName('card'),
+        modal_img = document.querySelector('.modal-img'),
+        modal_name = document.querySelector('#modal-name'),
+        modal_email = document.querySelector('#modal-email'),
+        modal_location = document.querySelector('#modal-city'),
+        modal_phone = document.querySelector('#modal-phone'),
+        modal_address = document.querySelector('#modal-address'),
+        modal_birthday = document.querySelector('#modal-birthday'),
+        search_container = document.querySelector('div[class="search-container"]');
 let array_of_displayed_names = [];
 
 fetchData();
@@ -130,16 +127,16 @@ function displayUser (userInfo) {
                         if (card_name === full_name) {
                             array_of_displayed_names.push(user);
                         }
-            }
-        });
+                }
+            });
         }   
         return array_of_displayed_names;
     })
 
 
-/*******************
- * CUSTOMIZING MODALS
- *******************/
+/*********************
+ * CUSTOMIZING MODALS (changing information shown in the modal when toggling between employees)
+ *********************/
 
  function customize_modal (user) {
     const full_name = `${user.name.first} ${user.name.last}`;
@@ -177,10 +174,10 @@ function displayUser (userInfo) {
 });
 
 /******************************************************
- * EVENT LISTENERS FOR BOTH BUTTONS - "PREV" AND "NEXT".    Also added closing modals by pressing Escape key
+ * EVENT LISTENERS FOR BUTTONS "PREV" AND "NEXT".    
  *****************************************************/
 
-
+//event listener for toggling between employees by clicking buttons
 [btn_prev, btn_next].forEach( button => {
     button.addEventListener('click', (e) => {
     const target_modal = e.target.closest('.modal');
@@ -206,7 +203,7 @@ function displayUser (userInfo) {
     });
 });
 
-
+//event listener for toggling between employees by pressing keyboard buttons "->" and "<-"
 document.addEventListener('keydown', (e) => {
     if (overlay.style.display === 'block') {
         const current_modal = document.querySelector('.modal');
@@ -234,115 +231,8 @@ document.addEventListener('keydown', (e) => {
 
         //close modal by pressing Escape key
         if (e.key === "Escape") {
-
             overlay.style.display = 'none';
         }
-        
     }
 })
 
-/**
- * This is working!!!
- */
-
-
-// [btn_prev, btn_next].forEach( button => {
-//     button.addEventListener(trigger, (e) => {
-//     const target_modal = e.target.closest('.modal');
-//     const name = target_modal.querySelector('#modal-name').textContent;
-
-        
-
-//     action('click', name);
-
-
-
-//     });
-// });
-
-    /**********
-    for (let i=0; i<array_of_displayed_names.length; i++){        
-        const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
-        //for "Prev" button
-        if (e.target.textContent === 'Prev') {
-            if (name === full_name && i !== 0) {
-                customize_modal (array_of_displayed_names[i-1])
-            }
-        }
-        //for "Next" button
-        if (e.target.textContent === 'Next') {
-            if (name === full_name && i < array_of_displayed_names.length - 1) {
-                customize_modal (array_of_displayed_names[i+1])
-            }
-        }
-    }
-
-
-
-****/
-
-
-// function action(trigger, target_name) {
-//         for (let i=0; i<array_of_displayed_names.length; i++){        
-//             const full_name = `${array_of_displayed_names[i].name.first} ${array_of_displayed_names[i].name.last}`;
-
-//             if (trigger === 'click') {
-
-//                 //for "Prev" button
-//                 if (ev_target.textContent === 'Prev') {
-//                     if (target_name === full_name && i !== 0) {
-//                         customize_modal (array_of_displayed_names[i-1])
-//                     }
-//                 }
-
-//                 if (ev_target.textContent === 'Next') {
-//                     if (target_name === full_name && i < array_of_displayed_names.length - 1) {
-//                         customize_modal (array_of_displayed_names[i+1])
-//                     }
-//                 }  
-//             }
-//         }
-// }
-
-
-
-
-
-
-
-
-
-
-/**
- * This will return all children of the parent node that are not the element.
- */
-// function getAllSiblings(element, parent) {
-//     const children = [...parent.children];
-//     return children.filter(child => child !== element);
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//regex for phone
-// function isValidTelephone(telephone) {
-//     return  /^\D*\d{3}\D*\d{3}\D*\d{4}\D*$/.test(telephone);
-//   }

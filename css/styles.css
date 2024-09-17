@@ -1,9 +1,10 @@
 /* ===================================== 
    Public API Request
-    - changed the border-radius of the search button and search field to .5rem for each side
+    - made border-radius of the search button and search field more round.
     - made the border color of the search button and search field thicker and darker
     - changed the background color of the search button to light blue.
-
+    - changed the font of the h1 header to Lucida Handwriting, cursive font-family and added a grey blurred box-shadow to it.
+    
 ======================================== */
 
 @import url('https://fonts.googleapis.com/css?family=Nunito');
@@ -70,10 +71,10 @@ header h1 {
 /* ===================================== 
    Gallery
    - made all cards' borders more round.
-   - changed the background color to pale grey-blue.
+   - changed the background color of the cards to pale grey-blue.
    - added thin grey border to the images.
    - made the font of the email and location bold.
-   - 
+   - added grey blurred box-shadow to all user cards.
 ======================================== */
 
 .gallery {
@@ -134,17 +135,15 @@ header h1 {
 
 /* ===================================== 
    Modal
-  - changed border-radius for modals to 1em
-  - added dark blue border to the image 
-  - changed the color of modal's background to light blue
-  - added thick dark-blue vorder to the whole modal
-  - changed the background color of the btn-container to light blue and removed the border
-  - changed the color of buttons "Prev" and "Next" to dark blue
-  - set the size of the font for the name to 30px
-  - set the size of the font for the email to 18px
+  - changed border-radius for modals to 1em and made the border thick dark-blue.
+  - added dark blue border to the image.
+  - changed the color of modal's background to light blue.
+  - changed the background color of the btn-container to light blue and removed it's border.
+  - changed the color of buttons "Prev" and "Next" to dark blue.
+  - set the size of the font for the name to 30px, and for the email to 18px.
   - made the text for the country, email, phone, DOB - bold.
   - made the borders of "Prev", "Next" and "Close" buttons more round.
-  - 
+  
 ======================================== */
 
 .modal-container {
@@ -214,9 +213,7 @@ header h1 {
     padding: 10px 15px 15px;;
     margin: 10px auto auto;
     background: rgb(190, 231, 250);
-   
 }
-
 
 .modal-btn-container .btn {
     display: inline-block;
